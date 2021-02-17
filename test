@@ -1,3 +1,6 @@
+LAMBDA
+-------
+
 {
   "Records": [
     {
@@ -29,3 +32,27 @@
     }
   ]
 }
+
+
+Lambda Method
+
+console.log("Loading Function")
+exports.handler = async (event, context) => {
+    console.log(JSON.stringify(event, null, 2))
+    
+    var message = JSON.parse(event.Records[0].Sns.Message);
+    if( message.cook_secs < message.req_secs){
+        if( !message.pre){
+            context.succeed("USER Ended"+message.pre + " preset early")
+        }else{
+            context.succeed("Timeout");
+        }
+    }
+    context.succeed(message);
+    // TODO implement
+    // const response = {
+    //     statusCode: 200,
+    //     body: JSON.stringify('Hello from Lambda!'),
+    // };
+    // return response;
+};
